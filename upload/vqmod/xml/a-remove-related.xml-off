@@ -1,0 +1,17 @@
+<!-- Created using vQmod XML Generator by UKSB - http://www.opencart-extensions.co.uk/vqgen //-->
+<modification>
+	<id><![CDATA[Remove the reverse leg of the related product]]></id>
+	<version><![CDATA[0.0.2]]></version>
+	<vqmver><![CDATA[2.1.7]]></vqmver>
+	<author><![CDATA[Andrew Basson (andrew.basson@gmail.com)]]></author>
+	<file name="admin/model/catalog/product.php">
+		<operation>
+			<search position="replace" offset="1"><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "product_related WHERE product_id = '" . (int)$related_id . "' AND related_id = '" . (int)$product_id . "'");]]></search>
+			<add><![CDATA[]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[$this->db->query("DELETE FROM " . DB_PREFIX . "product_related WHERE related_id = '" . (int)$product_id . "'");]]></search>
+			<add><![CDATA[]]></add>
+		</operation>
+	</file>
+</modification>

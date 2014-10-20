@@ -1,0 +1,13 @@
+<modification>
+	<id>Add placeholder image for products without image</id>
+	<version>1.0.0</version>
+	<vqmver>2.0.0</vqmver>
+	<author>G.Mancini - slashmaker.com - info@slashmaker.com, modified for 1.5.4 by Andrew Basson</author>
+	
+	<file name="catalog/model/catalog/product.php">
+		<operation>
+			<search position="replace"><![CDATA['image'            => $query->row['image'],]]></search>
+			<add><![CDATA['image'            => ($query->row['image'] ? $query->row['image'] : (string)'bulk_image.jpg'),]]></add>
+		</operation>
+	</file>
+</modification>

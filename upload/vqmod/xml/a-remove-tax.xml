@@ -1,0 +1,30 @@
+<modification>
+<id><![CDATA[Remove Tax Display from Site]]></id>
+<version><![CDATA[0.0.0.1]]></version>
+<vqmver><![CDATA[2.1.7]]></vqmver>
+<author><![CDATA[Andrew Basson]]></author>
+	<file name="catalog/view/theme/*/template/product/product.tpl">
+		<operation>
+			<search position="replace" offset="2" index="1" errror="log"><![CDATA[<?php if ($tax) { ?>]]></search>
+			<add><![CDATA[]]></add>
+		</operation>
+	</file>
+        <file name="catalog/view/theme/*/template/product/manufacturer_info.tpl">
+                <operation>
+			<search position="replace" offset="2" index="1" errror="log"><![CDATA[<?php if ($product['tax']) { ?>]]></search>
+			<add><![CDATA[]]></add>
+                </operation>
+        </file>
+        <file name="catalog/view/theme/*/template/product/category.tpl">
+                <operation>
+			<search position="replace" offset="2" index="1" errror="log"><![CDATA[<?php if ($product['tax']) { ?>]]></search>
+			<add><![CDATA[]]></add>
+                </operation>
+        </file>
+        <file name="catalog/view/theme/*/template/product/search.tpl">
+                <operation>
+			<search position="replace" offset="2" index="1" errror="log"><![CDATA[<?php if ($product['tax']) { ?>]]></search>
+			<add><![CDATA[]]></add>
+                </operation>
+        </file>
+</modification>

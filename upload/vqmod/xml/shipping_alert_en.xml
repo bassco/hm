@@ -1,0 +1,107 @@
+<modification>
+    <id>Add Free Shipping Alert</id>
+    <version>1</version>
+    <vqmver>2.3.2</vqmver>
+    <author>Andrei Bogdan (andrei.opencart@yahoo.com)</author>
+	<!-- template -->
+	<file name="catalog/view/theme/*/template/checkout/shipping_method.tpl">
+		<operation>
+			<search position="before"><![CDATA[<b><?php echo $text_comments; ?></b>]]></search>
+			<add><![CDATA[
+				<?php if ($alert) { ?>
+				<div class="attention">
+					<?php echo $alert; ?>
+				</div>
+				<?php } ?>
+				<?php if ($notify) { ?>
+				<div class="success">
+					<?php echo $notify; ?>
+				</div>
+				<?php } ?>
+				<br />
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/checkout/cart.tpl">
+		<operation>
+			<search position="replace" error="log"><![CDATA[<div class="cart-info">]]></search>
+			<add><![CDATA[<div class="cart-info">
+				<?php if ($alert) { ?>
+				<div class="attention">
+					<?php echo $alert; ?>
+				</div>
+				<?php } ?>
+				<?php if ($notify) { ?>
+				<div class="success">
+					<?php echo $notify; ?>
+				</div>
+				<?php } ?>
+				<br />
+			]]></add>
+		</operation>
+	</file>
+	<!-- language -->
+	<file name="catalog/language/english/checkout/checkout.php">
+		<operation>
+			<search position="after"><![CDATA[$_['text_checkout_shipping_method']  = 'Step 4: Delivery Method';]]></search>
+			<add><![CDATA[
+				$_['text_alert']                     = 'You can enjoy Free Shipping for an ordered amount of at least <strong>%s</strong>.<br />You only need to order for <strong>%s</strong> more and you will qualify for Free Shipping!';
+				$_['text_notify']					 = 'Your ordered amount is larger than <strong>%s</strong>.<br /> You are qualified for Free Shipping.';
+			]]></add>
+		</operation>
+	</file>
+	<file name="catalog/language/english/checkout/cart.php">
+		<operation>
+			<search position="after"><![CDATA[$_['heading_title']          = 'Shopping Cart';]]></search>
+			<add><![CDATA[
+				$_['text_alert']                     = 'You can enjoy Free Shipping for an ordered amount of at least <strong>%s</strong>.<br />You only need to order for <strong>%s</strong> more and you will qualify for Free Shipping!';
+				$_['text_notify']					 = 'Your ordered amount is larger than <strong>%s</strong>.<br /> You are qualified for Free Shipping.';
+			]]></add>
+		</operation>
+	</file>
+	<!-- controller -->
+    <file name="catalog/controller/checkout/cart.php">
+        <operation>
+            <search position="after"><![CDATA[
+				$this->data['totals'] = $total_data;
+            ]]></search>
+            <add><![CDATA[
+				if( $this->cart->getSubTotal() < $this->config->get('free_total') ) {
+					$diff = (float)($this->config->get('free_total') - $this->cart->getSubTotal());
+				} else {
+					$diff = (float)($this->cart->getSubTotal() - $this->config->get('free_total'));
+				}
+				if ($this->cart->getSubTotal() < $this->config->get('free_total')) {
+					$this->data['notify'] = false;
+					$this->data['alert'] = sprintf( $this->language->get('text_alert'), $this->currency->format($this->config->get('free_total'),false,false), $this->currency->format($diff,false,false) );
+					
+				} else {
+					$this->data['alert'] = false;
+					$this->data['notify'] = sprintf(  $this->language->get('text_notify'), $this->currency->format($this->config->get('free_total'),false,false) );
+				}
+            ]]></add>
+        </operation>
+    </file>
+	<file name="catalog/controller/checkout/shipping_method.php">
+		<operation>
+			<search position="before"><![CDATA[
+				$this->data['button_continue'] = $this->language->get('button_continue');
+			]]></search>
+			<add><![CDATA[
+				if( $this->cart->getSubTotal() < $this->config->get('free_total') ) {
+					$diff = (float)($this->config->get('free_total') - $this->cart->getSubTotal());
+				} else {
+					$diff = (float)($this->cart->getSubTotal() - $this->config->get('free_total'));
+				}
+				if ($this->cart->getSubTotal() < $this->config->get('free_total')) {
+					$this->data['notify'] = false;
+					$this->data['alert'] = sprintf( $this->language->get('text_alert'), $this->currency->format($this->config->get('free_total'),false,false), $this->currency->format($diff,false,false) );
+					
+				} else {
+					$this->data['alert'] = false;
+					$this->data['notify'] = sprintf(  $this->language->get('text_notify'), $this->currency->format($this->config->get('free_total'),false,false) );
+				}
+			]]></add>
+		</operation>
+	</file>
+</modification>

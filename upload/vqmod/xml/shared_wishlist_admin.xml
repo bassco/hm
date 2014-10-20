@@ -1,0 +1,55 @@
+<modification>
+	<id>Shared Wishlist</id>
+	<version>1.0</version>
+	<vqmver>1.2.3</vqmver>
+	<author>admin@vger.co.uk</author>
+	
+	<file name="admin/view/template/common/header.tpl">
+        <operation>
+            <search position="after"><![CDATA[
+<li><a href="<?php echo $report_product_purchased; ?>"><?php echo $text_report_product_purchased; ?></a></li>			
+            ]]></search>
+            <add><![CDATA[
+			<li><a href="<?php echo $report_product_wishlisted; ?>"><?php echo $text_report_product_wishlisted; ?></a></li>			
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+<li><a href="<?php echo $report_customer_reward; ?>"><?php echo $text_report_customer_reward; ?></a></li>            ]]></search>
+            <add><![CDATA[
+			<li><a href="<?php echo $report_customer_wishlists; ?>"><?php echo $text_report_customer_wishlists; ?></a></li>			
+            ]]></add>
+        </operation>
+	</file>	
+	<file name="admin/controller/common/header.php">
+        <operation>
+            <search position="after"><![CDATA[
+$this->data['text_report_product_purchased'] = $this->language->get('text_report_product_purchased');
+            ]]></search>
+            <add><![CDATA[
+		$this->data['text_report_product_wishlisted'] = $this->language->get('text_report_product_wishlisted');
+		$this->data['text_report_customer_wishlists'] = $this->language->get('text_report_customer_wishlists');
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+$this->data['report_product_purchased'] = $this->url->link('report/product_purchased', 'token=' . $this->session->data['token'], 'SSL');
+            ]]></search>
+            <add><![CDATA[
+			$this->data['report_product_wishlisted'] = $this->url->link('report/product_wishlisted', 'token=' . $this->session->data['token'], 'SSL');
+			$this->data['report_customer_wishlists'] = $this->url->link('report/customer_wishlists', 'token=' . $this->session->data['token'], 'SSL');
+            ]]></add>
+        </operation>
+	</file>	
+	<file name="admin/language/english/common/header.php">
+        <operation>
+            <search position="after"><![CDATA[
+$_['text_report_product_purchased']    = 'Purchased';
+            ]]></search>
+            <add><![CDATA[
+$_['text_report_product_wishlisted']    = 'Wishlisted';
+$_['text_report_customer_wishlists']    = 'Wishlists';
+            ]]></add>
+        </operation>
+	</file>	
+</modification>

@@ -1,0 +1,5 @@
+.coming_soon > div {width:auto;}
+.coming_soon .image {float:left;padding-right:5px;}
+.coming_soon .name {float:left;}
+.coming_soon .price {float:left;}
+.coming_soon .cart {clear:left;}

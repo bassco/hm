@@ -1,0 +1,54 @@
+<modification>
+	<id>Add Reports to Admin</id>
+	<version>1.0</version>
+	<vqmver>2.1.7</vqmver>
+	<author>.</author>
+<file name="admin/controller/common/header.php">
+	<operation>
+	<search position="after"><![CDATA[$this->data['text_report_product_purchased'] = $this->language->get('text_report_product_purchased');]]></search>
+	<add>
+    <![CDATA[
+	$this->data['text_report_picklist'] = $this->language->get('text_report_picklist');
+	$this->data['text_report_added'] = $this->language->get('text_report_added');
+    $this->data['text_report_due'] = $this->language->get('text_report_due');
+	$this->data['text_report_cart'] = $this->language->get('text_report_cart');
+	]]></add>
+	</operation>
+	<operation>
+	<search position="after"><![CDATA[$this->data['report_product_purchased'] = $this->url->link('report/product_purchased', 'token=' . $this->session->data['token'], 'SSL');]]></search>
+	<add>
+    <![CDATA[
+	$this->data['report_picklist'] = $this->url->link('report/product_picklist', 'token=' . $this->session->data['token'], 'SSL');
+	$this->data['report_added'] = $this->url->link('report/product_added', 'token=' . $this->session->data['token'], 'SSL');
+	$this->data['report_due'] = $this->url->link('report/product_due', 'token=' . $this->session->data['token'], 'SSL');
+	$this->data['report_cart'] = $this->url->link('report/product_carted', 'token=' . $this->session->data['token'], 'SSL');
+	]]></add>
+	</operation>
+</file>
+<file name="admin/language/english/common/header.php">
+	<operation>
+	<search position="after"><![CDATA[$_['text_report_product_purchased']    = 'Purchased';]]></search>
+	<add>
+    <![CDATA[
+	$_['text_report_picklist'] = 'Picklist';
+	$_['text_report_added'] = 'Product Added';
+	$_['text_report_due'] = 'Product Due';
+	$_['text_report_cart'] = 'Product in Carts';
+	]]></add>
+	</operation>
+</file>
+<file name="admin/view/template/common/header.tpl">
+	<operation>
+	<search position="after"><![CDATA[<li><a href="<?php echo $report_product_purchased; ?>"><?php echo $text_report_product_purchased; ?></a></li>]]></search>
+	<add>
+    <![CDATA[
+	<li><a href="<?php echo $report_picklist; ?>"><?php echo $text_report_picklist; ?></a></li>
+	<li><a href="<?php echo $report_added; ?>"><?php echo $text_report_added; ?></a></li>
+	<li><a href="<?php echo $report_due; ?>"><?php echo $text_report_due; ?></a></li>
+	<li><a href="<?php echo $report_cart; ?>"><?php echo $text_report_cart; ?></a></li>
+	]]></add>
+	</operation>
+</file>
+</modification>
+
+

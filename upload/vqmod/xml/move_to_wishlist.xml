@@ -1,0 +1,151 @@
+<modification>
+	<id>Move to Wishlist</id>
+	<version>1.0</version>
+	<vqmver>1.2.3</vqmver>
+	<author>admin@vger.co.uk</author>
+
+	<file name="catalog/view/theme/*/template/common/header.tpl">
+        <operation>
+            <search position="before"><![CDATA[
+<?php foreach ($scripts as $script) { ?>
+            		]]></search>
+            <add><![CDATA[
+<script async type="text/javascript" src="catalog/view/javascript/wishlist.js"></script>
+            ]]></add>
+        </operation>
+	</file>	
+	<file name="catalog/view/theme/*/template/checkout/cart.tpl">
+        <operation>
+            <search position="replace" offset="1"><![CDATA[
+<input type="image" src="catalog/view/theme/default/image/update.png" alt="<?php echo $button_update; ?>" title="<?php echo $button_update; ?>" />
+            		]]></search>
+            <add><![CDATA[
+              <input type="image" src="catalog/view/theme/default/image/update.png" alt="<?php echo $button_update; ?>" title="<?php echo $button_update; ?>" />
+              &nbsp;<a href="<?php echo $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a>
+              &nbsp;<a href="<?php echo $product['mtremove']; ?>"><img src="catalog/view/theme/default/image/mtwishlist.jpg" alt="<?php echo $button_mtremove; ?>" title="<?php echo $button_mtremove; ?>" /></a>			  
+			  </td>
+            ]]></add>
+        </operation>
+	</file>	
+
+	<file name="catalog/view/theme/*/template/module/cart.tpl">
+        <operation>
+            <search position="replace"><![CDATA[
+<td class="remove"><img src="catalog/view/theme/default/image/remove-small.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" onclick="(getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') ? location = 'index.php?route=checkout/cart&remove=<?php echo $product['key']; ?>' : $('#cart').load('index.php?route=module/cart&remove=<?php echo $product['key']; ?>' + ' #cart > *');" /></td>
+          		]]></search>
+            <add><![CDATA[
+<td class="remove"><img src="catalog/view/theme/default/image/remove-small.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" onclick = "(getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') ? location = 'index.php?route=checkout/cart&remove=<?php echo $product['key']; ?>' : $('#cart').load('index.php?route=module/cart&remove=<?php echo $product['key']; ?>' + ' #cart > *');" /></td>&nbsp;<td class="remove"><img src="catalog/view/theme/default/image/mtwishlist.jpg" alt="<?php echo $button_mtremove; ?>" title="<?php echo $button_mtremove; ?>" onclick = "(getURLVar('route') == 'checkout/cart' || getURLVar('route') == 'checkout/checkout') ? location = 'index.php?route=checkout/cart&mtremove=<?php echo $product['key']; ?>' : $('#cart').load('index.php?route=module/cart&mtremove=<?php echo $product['key']; ?>' + ' #cart > *'); $('#wishlist-total').load('index.php?route=module/cart/atw'); (getURLVar('route') == 'account/wishlist') ? $('#content .wishlist-info').load('index.php?route=account/wishlist/refresh') : {};"  />	
+            ]]></add>
+        </operation>
+	</file>	
+
+	<file name="catalog/controller/checkout/cart.php">
+        <operation>
+            <search position="after"><![CDATA[
+$this->data['button_remove'] = $this->language->get('button_remove');
+            ]]></search>
+            <add><![CDATA[
+$this->data['button_mtremove'] = $this->language->get('button_mtremove');
+            ]]></add>
+        </operation>
+		
+        <operation>
+            <search position="before"><![CDATA[
+// Remove
+            ]]></search>
+            <add><![CDATA[
+		// Remove from cart and add to wishlist
+		if (isset($this->request->get['mtremove'])) {
+		
+			if (!isset($this->session->data['wishlist'])) {
+				$this->session->data['wishlist'] = array();
+			}
+				
+			if (!in_array($this->request->get['mtremove'], $this->session->data['wishlist'])) {	
+				$this->session->data['wishlist'][] = $this->request->get['mtremove'];
+			}
+		
+			$this->cart->remove($this->request->get['mtremove']);
+			
+			unset($this->session->data['vouchers'][$this->request->get['mtremove']]);
+			
+			$this->session->data['success'] = $this->language->get('text_remove');
+		
+			unset($this->session->data['shipping_method']);
+			unset($this->session->data['shipping_methods']);
+			unset($this->session->data['payment_method']);
+			unset($this->session->data['payment_methods']); 
+			unset($this->session->data['reward']);  
+								
+			$this->redirect($this->url->link('checkout/cart'));
+		}
+
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+'remove'   => $this->url->link('checkout/cart', 'remove=' . $product['key'])
+            ]]></search>
+            <add><![CDATA[
+					'mtremove' => $this->url->link('checkout/cart', 'mtremove=' . $product['key']),
+            ]]></add>
+        </operation>
+		
+	</file>	
+	<file name="catalog/controller/module/cart.php">
+        <operation>
+            <search position="after"><![CDATA[
+$this->data['button_remove'] = $this->language->get('button_remove');
+            ]]></search>
+            <add><![CDATA[
+$this->data['button_mtremove'] = $this->language->get('button_mtremove');
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[
+// Totals            ]]></search>
+            <add><![CDATA[
+
+      	if (isset($this->request->get['mtremove'])) {
+				$this->cart->remove($this->request->get['mtremove']);
+			
+				unset($this->session->data['vouchers'][$this->request->get['mtremove']]);
+
+			if (!isset($this->session->data['wishlist'])) {
+				$this->session->data['wishlist'] = array();
+			}
+				
+			if (!in_array($this->request->get['mtremove'], $this->session->data['wishlist'])) {	
+				$this->session->data['wishlist'][] = $this->request->get['mtremove'];
+			}
+			 
+		}	
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace" ><![CDATA[
+$this->response->setOutput($this->render());
+            ]]></search>
+            <add><![CDATA[
+		$this->response->setOutput($this->render());		
+	}			
+	public function atw() {
+		$this->language->load('account/wishlist');
+		
+		$json = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+		
+		$this->response->setOutput($json);	
+            ]]></add>
+        </operation>
+	</file>	
+	<file name="catalog/language/english/english.php">
+        <operation>
+            <search position="after"><![CDATA[
+$_['button_remove']         = 'Remove';
+			]]></search>
+            <add><![CDATA[
+$_['button_mtremove']         = 'Move To Wishlist';
+            ]]></add>
+        </operation>
+	</file>	
+</modification>

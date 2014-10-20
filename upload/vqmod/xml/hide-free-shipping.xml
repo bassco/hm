@@ -1,0 +1,23 @@
+<modification>
+	<id>Hide shipping if free shipping</id>
+	<version>1.0</version>
+	<vqmver>2.1.7</vqmver>
+	<author>Andrew Basson (andrew.basson@gmail.com)</author>
+   
+<file name="catalog/model/shipping/flat.php">
+	<operation>
+	<search position="add" offset="2"><![CDATA[$status = false;]]></search>
+	<add><![CDATA[
+			$status = false;
+                }
+
+                if ($this->cart->getSubTotal() >= $this->config->get('free_total')) {
+                        $status = false;
+                }
+
+]]></add>
+	</operation>
+</file>
+</modification>
+
+

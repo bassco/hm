@@ -1,0 +1,75 @@
+<modification>
+
+    <id>Automatically generate SEO url for products</id>
+    <version>1.0.1</version>
+    <vqmver>1.0.0</vqmver>
+    <author>intreek_interactive</author>
+
+    <file name="admin/model/catalog/manufacturer.php">
+        <operation>
+            <search position="after" offset="2"><![CDATA[if ($data['keyword']) {]]></search>
+            <add><![CDATA[else {
+                    $intreek_man_name = $data['name'];
+
+                    $intreek_man_name = htmlspecialchars_decode($intreek_man_name,ENT_QUOTES);
+
+                    $intreek_sanitized_name = preg_replace('/\%/',' percent ',$intreek_man_name);
+                    $intreek_sanitized_name = preg_replace('/\@/','',$intreek_sanitized_name);
+                    $intreek_sanitized_name = preg_replace('/\&/',' and ',$intreek_sanitized_name);
+                    $intreek_sanitized_name = preg_replace('/\s[\s]+/','-',$intreek_sanitized_name);    // Strip off multiple spaces
+                    $intreek_sanitized_name = preg_replace('/[\s\W]+/','-',$intreek_sanitized_name);    // Strip off spaces and non-alpha-numeric
+                    $intreek_sanitized_name = preg_replace('/^[\-]+/','',$intreek_sanitized_name); // Strip off the starting hyphens
+                    $intreek_sanitized_name = preg_replace('/[\-]+$/','',$intreek_sanitized_name); // // Strip off the ending hyphens
+                    $intreek_sanitized_name = strtolower($intreek_sanitized_name); 
+
+                    $intreek_query = $this->db->query("SELECT COUNT(*) as `total` FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($intreek_sanitized_name) . "'");
+                    $occurance_count = $intreek_query->row['total'];
+                    $okay = false;
+                    $count_modifier = '';
+                    $intreek_count = 0;
+
+                    do
+                    {
+                        if($intreek_count > 0)
+                        {
+                            $count_modifier = '-'.$intreek_count;
+                        }
+                        $intreek_query = $this->db->query("SELECT COUNT(*) as `total` FROM " . DB_PREFIX . "url_alias WHERE keyword = '" . $this->db->escape($intreek_sanitized_name) . $count_modifier .  "'");
+
+                        $occurance = $intreek_query->row['total'];
+                        if($occurance == 0)
+                        {
+                            $okay = true;
+                        }   
+                        else
+                        {
+                            $intreek_count++;
+                        }
+                    } while($okay == false);
+
+                    $this->db->query("INSERT INTO " . DB_PREFIX . "url_alias SET query = 'manufacturer_id=" . (int)$manufacturer_id . "', keyword = '" . $this->db->escape($intreek_sanitized_name) . $count_modifier ."'");
+                }
+            ]]></add>
+        </operation>    
+    </file>     
+
+    <file name="admin/language/english/catalog/manufacturer.php">
+        <operation>
+            <search position="replace"><![CDATA['SEO Keyword:<br /><span class="help">Do not use spaces instead replace spaces with - and make sure the keyword is globally unique.</span>';]]>
+            </search>
+            <add><![CDATA['SEO Keyword:<br /><span class="help">Do not use spaces instead replace spaces with - and make sure the keyword is globally unique. Leave blank to have it auto-generated.</span>';]]>
+            </add>
+        </operation>
+    </file>
+</modification>
+<!--
+<modification>  - This is the highest level of the file and there can only be one
+<id>            - This is the name of the mod. Format: Free form text. (Informational)
+<version>       - This is the version of the mod. Format: Number and Decimal (1.0.0) (Informational)
+<author>        - This is the author of the mod. Format: Free form text (Informational)
+<file>          - This is the name of the file to modify. Requires attribute "name" as relative filename (catalog/controller/product/product.php). There can be multiple
+<operation>     - This is the wrapper of the actual operation occuring. There can be multiple operations to the same file.
+<search>        - This is the first required step of the operation. Uses an optional attribute "position" set to before|after|replace. replace is default. One per operation. Use CDATA tags to wrap code.
+<add>           - This is the second required step of the operation. Uses an optional attribute "trim" set to true|false to trim away whitespace and linebreaks. false is default. One per operation. Location of added data depends on the position of the <search> command. Use CDATA tags to wrap code.
+<![CDATA[  ]]>  - These are called CDATA tags and they are used by xml to specify that the data between should not be evaluated.
+-->

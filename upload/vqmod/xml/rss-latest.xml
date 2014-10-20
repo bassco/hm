@@ -1,0 +1,31 @@
+<modification>
+	<id>Add fb image and data options to home, products and categories</id>
+	<version>1.0</version>
+	<vqmver>2.1.7</vqmver>
+	<author>Andrew Basson (andrew.basson@gmail.com)</author>
+
+<file name="catalog/view/theme/*/template/common/header.tpl">
+	<operation>
+	<search position="before"><![CDATA[<?php foreach ($links as $link) { ?>]]></search>
+	<add><![CDATA[<link href="index.php?route=feed/latest_products_rss&currency=<?php echo $this->currency->getCode(); ?>&n=<?php echo $this->config->get('latest_products_rss_limit') ; ?>" rel="alternate" type="application/rss+xml" />]]></add>
+	</operation>
+</file>
+<file name="catalog/view/theme/*/template/module/latest.tpl">
+	<operation>
+	<search position="before"><![CDATA[<div class="box">]]></search>
+	<add><![CDATA[<style type="text/css" media="screen">
+img.rss-image {
+        float: right;
+        margin-top: -3px;
+}
+</style>
+]]></add>
+        </operation>
+	<operation>
+	<search position="replace"><![CDATA[heading_title; ?>]]></search>
+	<add><![CDATA[heading_title; ?><a href="index.php?route=feed/latest_products_rss&currency=<?php echo $this->currency->getCode(); ?>&n=<?php echo $this->config->get('latest_products_rss_limit') ; ?>"><img class="rss-image" src="image/feed-icon-14x14.png" alt="Latest RSS Feed" /></a>]]></add>
+	</operation>
+
+</file>
+
+</modification>

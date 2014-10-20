@@ -1,0 +1,13 @@
+﻿<modification>
+	<id>Meta all pages</id>
+	<version>1.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Si Guy (allweatherpaper.co.uk)</author>
+<file name="catalog/view/theme/*/template/common/header.tpl">
+<operation>
+	<search position="after"><![CDATA[<meta name="keywords" content="<?php echo $keywords; ?>" />]]></search>
+	<add><![CDATA[<?php } elseif (!$keywords) { ?>
+<meta name="keywords" content="hobbymania,rc,hobbyking,turnigy,nanotech,durafly,lanyu,volantex,radio,control,heli,helicopter,quad,quadcopter,cars,4x4,edf,epo,lipo,battery,esc,electric,2s,3s,4s,gliders,f3f" />]]></add>
+</operation>
+</file>
+</modification>

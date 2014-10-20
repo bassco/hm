@@ -1,0 +1,442 @@
+<modification>
+	<id><![CDATA[Remove Add to Cart button for Out of Stock items]]></id>
+	<version><![CDATA[1.2]]></version>
+	<vqmver><![CDATA[2.1.7]]></vqmver>
+	<author><![CDATA[OC2PS]]></author>
+	<file name="catalog/view/theme/*/template/product/product.tpl">
+		<operation>
+			<search position="replace" offset="12"><![CDATA[<div class="cart">]]></search>
+			<add><![CDATA[<div class="cart">
+          <input type="hidden" name="product_id" value="<?php echo $product_id; ?>" />
+<?php if ($stock_qty == 0 ) { ?>
+<div><span style="color: red; font-size: 16px;"><span class="outofstock"><?php echo $stock_status; ?></span></span></div>
+        <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+<?php } else { ?>
+        <div><?php echo $text_qty; ?>
+          <input type="text" name="quantity" size="2" value="<?php echo $minimum; ?>" />
+          &nbsp;
+          <input type="button" value="<?php echo $button_cart; ?>" id="button-cart" class="button" />
+        </div>
+        <div><span>&nbsp;&nbsp;&nbsp;<?php echo $text_or; ?>&nbsp;&nbsp;&nbsp;</span></div>
+<?php }
+?>
+        <div><a onclick="addToWishList('<?php echo $product_id; ?>');"><?php echo $button_wishlist; ?></a><br />
+          <a onclick="addToCompare('<?php echo $product_id; ?>');"><?php echo $button_compare; ?></a></div>
+        <?php if ($minimum > 1) { ?>
+        <div class="minimum"><?php echo $text_minimum; ?></div>
+        <?php } ?>
+]]></add>
+		</operation>
+<operation><search position="replace" ><![CDATA[<span><?php echo $text_stock; ?></span> <?php echo $stock; ?></div>]]></search>
+<add><![CDATA[<span><?php echo $text_stock; ?></span> <?php if($stock_qty) { echo $stock; } else { echo $date_available; } ?></div>]]></add>
+</operation>
+	</file>
+	<file name="catalog/controller/product/product.php">
+		<operation>
+			<search position="replace" offset="6"><![CDATA[if ($product_info['quantity'] <= 0) {]]></search>
+			<add><![CDATA[
+      $this->data['date_available'] = $product_info['date_available'];
+
+      $this->data['stock_status'] = $product_info['stock_status'];
+      $this->data['stock_qty'] = $product_info['quantity'];
+      $this->data['stock'] = $product_info['quantity'];
+      $this->data['has_stock'] = $product_info['has_stock'];
+      
+      if ($product_info['has_stock'] > 0 ) {
+        $this->data['stock_qty']=0;
+      
+        if ($product_info['has_stock'] == 1 ) {
+          $this->data['stock_status']="Coming Soon";
+          $this->data['stock']="Coming Soon";
+        } 
+        if ($product_info['has_stock'] == 2 ) {
+          $this->data['stock_status']="Out of Stock";
+          $this->data['stock']="Out of Stock";
+        }
+      }
+      $this->data['show_price']=$product_info['has_stock'];
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/product/category.php">
+		<operation>
+			<search position="before" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[$stock_status = $result['stock_status'];
+      $stock_qty = $result['quantity'];
+      $has_stock = $result['has_stock'];
+      
+      if ($has_stock > 0 ) {
+        $stock_qty = 0;
+      }
+      if ($has_stock == 1 ) {
+        $stock_status = "Coming Soon";
+      } 
+      if ($has_stock == 2){
+        $stock_status = "Out Of Stock";
+      }
+]]>
+      </add>
+		</operation>
+		<operation>
+			<search position="after" offset="10" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[    ,'stock_status'       => $stock_status,
+    'stock_qty'       => $stock_qty,
+    'show_price'       => $has_stock]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/product/category.tpl">
+		<operation>
+			<search position="replace" error="skip"><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button" />]]></search>
+			<add><![CDATA[<?php 
+if ($product['stock_qty'] <= 0) { 
+echo "<span style=\"color: red; font-size: 16px;\"><span class=\"outofstock\">" . $product['stock_status'] . "</span></span>";
+} else { 
+echo "<input type=\"button\" value=\"" . $button_cart . "\" onclick=\"addToCart('" . $product['product_id'] . "');\" class=\"button\" />";
+} 
+?>
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/product/search.php">
+		<operation>
+			<search position="before" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[$stock_status = $result['stock_status'];
+      $stock_qty = $result['quantity'];
+      $has_stock = $result['has_stock'];
+      
+      if ($has_stock > 0 ) {
+        $stock_qty = 0;
+      }
+      if ($has_stock == 1 ) {
+        $stock_status = "Coming Soon";
+      } 
+      If ($has_stock == 2){
+        $stock_status = "Out Of Stock";
+      }]]>
+      </add>
+		</operation>
+		<operation>
+			<search position="after" offset="9" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA['stock_status'       => $stock_status,
+'show_price'       => $has_stock,
+'stock_qty'       => $stock_qty,]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/product/search.tpl">
+		<operation>
+			<search position="replace" error="skip"><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button" />]]></search>
+			<add><![CDATA[<?php 
+if ($product['stock_qty'] <= 0) { 
+echo "<span style=\"color: red; font-size: 16px;\"><span class=\"outofstock\">" . $product['stock_status'] . "</span></span>";
+} else { 
+echo "<input type=\"button\" value=\"" . $button_cart . "\" onclick=\"addToCart('" . $product['product_id'] . "');\" class=\"button\" />";
+} 
+?>
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/product/manufacturer.php">
+		<operation>
+			<search position="before" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[$stock_status = $result['stock_status'];
+      $stock_qty = $result['quantity'];
+      $has_stock = $result['has_stock'];
+      
+      if ($has_stock > 0 ) {
+        $stock_qty = 0;
+      }
+      if ($has_stock == 1 ) {
+        $stock_status = "Coming Soon";
+      } 
+      If ($has_stock == 2){
+        $stock_status = "Out Of Stock";
+      }]]>
+      </add>
+		</operation>
+		<operation>
+			<search position="after" offset="4" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA['stock_status'       => $stock_status,
+'show_price'       => $has_stock,
+'stock_qty'       => $stock_qty,]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/product/manufacturer_info.tpl">
+		<operation>
+			<search position="replace" error="skip"><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button" />]]></search>
+			<add><![CDATA[<?php 
+if ($product['stock_qty'] <= 0) { 
+echo "<span style=\"color: red; font-size: 16px;\"><span class=\"outofstock\">" . $product['stock_status'] . "</span></span>";
+} else { 
+echo "<input type=\"button\" value=\"" . $button_cart . "\" onclick=\"addToCart('" . $product['product_id'] . "');\" class=\"button\" />";
+} 
+?>
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/product/special.php">
+		<operation>
+			<search position="before" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[$stock_status = $result['stock_status'];
+      $stock_qty = $result['quantity'];
+      $has_stock = $result['has_stock'];
+      
+      if ($has_stock > 0 ) {
+        $stock_qty = 0;
+      }
+      if ($has_stock == 1 ) {
+        $stock_status = "Coming Soon";
+      } 
+      If ($has_stock == 2){
+        $stock_status = "Out Of Stock";
+      }]]>
+      </add>
+		</operation>
+		<operation>
+			<search position="after" offset="5" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA['stock_status'       => $stock_status,
+'show_price'       => $has_stock,
+'stock_qty'       => $stock_qty,]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/product/special.tpl">
+		<operation>
+			<search position="replace" error="skip"><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button" />]]></search>
+			<add><![CDATA[<?php 
+if ($product['stock_qty'] <= 0) { 
+echo "<span style=\"color: red; font-size: 16px;\"><span class=\"outofstock\">" . $product['stock_status'] . "</span></span>";
+} else { 
+echo "<input type=\"button\" value=\"" . $button_cart . "\" onclick=\"addToCart('" . $product['product_id'] . "');\" class=\"button\" />";
+} 
+?>
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/product/compare.php">
+		<operation>
+			<search position="after" offset="6" error="skip"><![CDATA[if ($product_info['quantity'] <= 0) {]]></search>
+			<add><![CDATA[$stock_status = $product_info['stock_status'];
+      $stock_qty = $product_info['quantity'];
+      $has_stock = $product_info['has_stock'];
+      
+      if ($has_stock > 0 ) {
+        $stock_qty = 0;
+      }
+      if ($has_stock == 1 ) {
+        $stock_status = "Coming Soon";
+      } 
+      If ($has_stock == 2){
+        $stock_status = "Out Of Stock";
+      }]]>
+      </add>
+		</operation>
+		<operation>
+			<search position="after" offset="12" error="skip"><![CDATA[$this->data['products'][$product_id] = array(]]></search>
+			<add><![CDATA['stock_status'       => $stock_status,
+'show_price'       => $has_stock,
+'stock_qty'       => $stock_qty,]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/product/compare.tpl">
+		<operation>
+			<search position="replace" error="skip"><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button" />]]></search>
+			<add><![CDATA[<?php 
+if ($product['stock_qty'] <= 0) { 
+echo "<span style=\"color: red; font-size: 16px;\"><span class=\"outofstock\">" . $product['stock_status'] . "</span></span>";
+} else { 
+echo "<input type=\"button\" value=\"" . $button_cart . "\" onclick=\"addToCart('" . $product['product_id'] . "');\" class=\"button\" />";
+} 
+?>
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/module/featured.php">
+		<operation>
+			<search position="before" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[$stock_status = $result['stock_status'];
+      $stock_qty = $result['quantity'];
+      $has_stock = $result['has_stock'];
+      
+      if ($has_stock > 0 ) {
+        $stock_qty = 0;
+      }
+      if ($has_stock == 1 ) {
+        $stock_status = "Coming Soon";
+      } 
+      If ($has_stock == 2){
+        $stock_status = "Out Of Stock";
+      }]]>
+      </add>
+		</operation>
+		<operation>
+			<search position="after" offset="6" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA['stock_status'       => $stock_status,
+'show_price'       => $has_stock,
+'stock_qty'       => $stock_qty,]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/module/featured.tpl">
+		<operation>
+			<search position="replace" error="skip"><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button" />]]></search>
+			<add><![CDATA[<?php 
+if ($product['stock_qty'] <= 0) { 
+echo "<span style=\"color: red; font-size: 16px;\"><span class=\"outofstock\">" . $product['stock_status'] . "</span></span>";
+} else { 
+echo "<input type=\"button\" value=\"" . $button_cart . "\" onclick=\"addToCart('" . $product['product_id'] . "');\" class=\"button\" />";
+} 
+?>
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/module/bestseller.php">
+		<operation>
+			<search position="before" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[$stock_status = $result['stock_status'];
+      $stock_qty = $result['quantity'];
+      $has_stock = $result['has_stock'];
+      
+      if ($has_stock > 0 ) {
+        $stock_qty = 0;
+      }
+      if ($has_stock == 1 ) {
+        $stock_status = "Coming Soon";
+      } 
+      If ($has_stock == 2){
+        $stock_status = "Out Of Stock";
+      }]]>
+      </add>
+		</operation>
+		<operation>
+			<search position="after" offset="4" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA['stock_status'       => $stock_status,
+'show_price'       => $has_stock,
+'stock_qty'       => $stock_qty,]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/module/bestseller.tpl">
+		<operation>
+			<search position="replace" error="skip"><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button" />]]></search>
+			<add><![CDATA[<?php 
+if ($product['stock_qty'] <= 0) { 
+echo "<span style=\"color: red; font-size: 16px;\"><span class=\"outofstock\">" . $product['stock_status'] . "</span></span>";
+} else { 
+echo "<input type=\"button\" value=\"" . $button_cart . "\" onclick=\"addToCart('" . $product['product_id'] . "');\" class=\"button\" />";
+} 
+?>
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/module/latest.php">
+		<operation>
+			<search position="before" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[$stock_status = $result['stock_status'];
+      $stock_qty = $result['quantity'];
+      $has_stock = $result['has_stock'];
+      
+      if ($has_stock > 0 ) {
+        $stock_qty = 0;
+      }
+      if ($has_stock == 1 ) {
+        $stock_status = "Coming Soon";
+      } 
+      If ($has_stock == 2){
+        $stock_status = "Out Of Stock";
+      }]]>
+      </add>
+		</operation>
+		<operation>
+			<search position="after" offset="4" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA['stock_status'       => $stock_status,
+'show_price'       => $has_stock,
+'stock_qty'       => $stock_qty,]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/module/latest.tpl">
+		<operation>
+			<search position="replace" error="skip"><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button" />]]></search>
+			<add><![CDATA[<?php 
+if ($product['stock_qty'] <= 0) { 
+echo "<span style=\"color: red; font-size: 16px;\"><span class=\"outofstock\">" . $product['stock_status'] . "</span></span>";
+} else { 
+echo "<input type=\"button\" value=\"" . $button_cart . "\" onclick=\"addToCart('" . $product['product_id'] . "');\" class=\"button\" />";
+} 
+?>
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/module/special.php">
+		<operation>
+			<search position="before" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[$stock_status = $result['stock_status'];
+      $stock_qty = $result['quantity'];
+      $has_stock = $result['has_stock'];
+      
+      if ($has_stock > 0 ) {
+        $stock_qty = 0;
+      }
+      if ($has_stock == 1 ) {
+        $stock_status = "Coming Soon";
+      } 
+      If ($has_stock == 2){
+        $stock_status = "Out Of Stock";
+      }]]>
+      </add>
+		</operation>
+		<operation>
+			<search position="after" offset="4" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA['stock_status'       => $stock_status,
+'show_price'       => $has_stock,
+'stock_qty'       => $stock_qty,]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/module/special.tpl">
+		<operation>
+			<search position="replace" error="skip"><![CDATA[<input type="button" value="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" class="button" />]]></search>
+			<add><![CDATA[<?php 
+if ($product['stock_qty'] <= 0) { 
+echo "<span style=\"color: red; font-size: 16px;\"><span class=\"outofstock\">" . $product['stock_status'] . "</span></span>";
+} else { 
+echo "<input type=\"button\" value=\"" . $button_cart . "\" onclick=\"addToCart('" . $product['product_id'] . "');\" class=\"button\" />";
+} 
+?>
+]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/account/wishlist.php">
+		<operation>
+			<search position="before" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[$stock_status = $product_info['stock_status'];
+      $stock_qty = $product_info['quantity'];
+      $has_stock = $product_info['has_stock'];
+      
+      if ($has_stock > 0 ) {
+        $stock_qty = 0;
+      }
+      if ($has_stock == 1 ) {
+        $stock_status = "Coming Soon";
+      } 
+      If ($has_stock == 2){
+        $stock_status = "Out Of Stock";
+      }]]>
+      </add>
+		</operation>
+		<operation>
+			<search position="after" offset="4" error="skip"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA['stock_status'       => $stock_status,
+'show_price'       => $has_stock,
+'stock_qty'       => $stock_qty,]]></add>
+		</operation>
+	</file>
+	<file name="catalog/view/theme/*/template/account/wishlist.tpl">
+		<operation>
+			<search position="replace" error="skip"><![CDATA[<img src="catalog/view/theme/default/image/cart-add.png" alt="<?php echo $button_cart; ?>" title="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" />]]></search>
+			<add><![CDATA[<?php 
+if ($product['stock_qty'] <= 0) { 
+echo "<span style=\"color: red; font-size: 10px;\"><span class=\"outofstock\">" . $product['stock_status'] . "</span></span>";
+} else { 
+echo "<img src=\"catalog/view/theme/default/image/cart-add.png\" alt=\"" . $button_cart . "\" title=\"" . $button_cart . "\" onclick=\"addToCart('" . $product['product_id'] . "');\" />";
+} 
+?>
+]]></add>
+		</operation>
+	</file>
+</modification>

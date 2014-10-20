@@ -1,0 +1,39 @@
+<modification>
+	<id><![CDATA[@tik Google Rich Snippets p1]]></id>
+	<version><![CDATA[1.3]]></version>
+	<vqmver><![CDATA[2.1.7]]></vqmver>
+	<author><![CDATA[OC2PS]]></author>
+	<file name="catalog/model/catalog/review.php">
+		<operation>
+			<search position="replace" error="log"><![CDATA[return (int)$query->row['total'];]]></search>
+			<add><![CDATA[return $query->row['total'];]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/product/product.php">
+		<operation>
+			<search position="after" error="log"><![CDATA[(int)$product_info['reviews']);]]></search>
+			<add><![CDATA[$this->data['reviewnos'] = $product_info['reviews'];]]></add>
+		</operation>
+		<operation>
+			<search position="after" error="log"><![CDATA[(int)$result['reviews']),]]></search>
+			<add><![CDATA['reviewnos'    => $result['reviews'],]]></add>
+		</operation>
+		<operation>
+			<search position="replace" error="log"><![CDATA[$this->data['rating'] = (int)$product_info['rating'];]]></search>
+			<add><![CDATA[$this->data['rating'] = $product_info['rating'];
+			$this->data['currencycode'] = $this->currency->getCode();]]></add>
+		</operation>
+		<operation>
+			<search position="replace" error="log"><![CDATA[$rating = (int)$result['rating'];]]></search>
+			<add><![CDATA[$rating = $result['rating'];]]></add>
+		</operation>
+		<operation>
+			<search position="before" error="log"><![CDATA[$this->data['products'][] = array(]]></search>
+			<add><![CDATA[$currencycode = $this->currency;]]></add>
+		</operation>
+		<operation>
+			<search position="before" error="log"><![CDATA['rating'     => $rating,]]></search>
+			<add><![CDATA['currencycode'    => $currencycode,]]></add>
+		</operation>
+	</file>
+</modification>

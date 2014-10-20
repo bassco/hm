@@ -1,0 +1,20 @@
+<modification>
+	<id>Add a space to currency format</id>
+	<version>1.0</version>
+	<vqmver>2.1.7</vqmver>
+	<author>Andrew Basson (andrew.basson@gmail.com)</author>
+   
+<file name="system/library/currency.php">
+	<operation>
+	<search position="replace"><![CDATA[$string .= $symbol_left;]]></search>
+	<add><![CDATA[$string .= $symbol_left . " ";]]></add>
+	</operation>
+
+	<operation>
+	<search position="replace"><![CDATA[$string .= $symbol_right;]]></search>
+	<add><![CDATA[$string .= " " . $symbol_right;]]></add>
+	</operation>
+</file>
+</modification>
+
+

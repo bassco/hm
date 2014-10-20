@@ -1,0 +1,12 @@
+﻿<modification>
+	<id>Sub Total description change</id>
+	<version>1.0</version>
+	<vqmver>1.0.0</vqmver>
+	<author>Andrew Basson (andrew.basson@gmail.com)</author>
+<file name="catalog/language/english/total/sub_total.php">
+<operation>
+	<search position="replace" error="log"><![CDATA[Sub-Total]]></search>
+	<add><![CDATA[Sub-Total Excl. VAT]]></add>
+</operation>
+</file>
+</modification>

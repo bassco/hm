@@ -1,0 +1,21 @@
+<modification>
+	<id>Add the persons name to the registration email</id>
+	<version>1.0</version>
+	<vqmver>2.1.7</vqmver>
+	<author>Andrew Basson (andrew.basson@gmail.com)</author>
+   
+<file name="catalog/language/english/mail/customer.php">
+	<operation>
+	<search position="replace"><![CDATA[$_['text_welcome']  = 'Welcome]]></search>
+	<add><![CDATA[$_['text_welcome']  = 'Welcome, %s %s]]></add>
+	</operation>
+</file>
+<file name="catalog/model/account/customer.php">
+	<operation>
+	<search position="replace"><![CDATA[$message = sprintf($this->language->get('text_welcome'), $this->config->get('config_name')) . "\n\n";]]></search>
+	<add><![CDATA[$message = sprintf($this->language->get('text_welcome'), $message = $data['firstname'], $message = $data['lastname'], $this->config->get('config_name')) . "\n\n";]]></add>
+	</operation>
+</file>
+</modification>
+
+

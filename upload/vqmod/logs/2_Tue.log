@@ -1,0 +1,30 @@
+---------- Date: 2014-06-10 09:27:56 ~ IP : 196.35.154.176 ----------
+REQUEST URI : /index.php?route=account/wishlist
+MOD DETAILS:
+   modFile   : /usr/www/users/hobbybwyan/vqmod/xml/shared_wishlist.xml
+   id        : Shared Wishlist
+   version   : 1.0
+   vqmver    : 1.2.3
+   author    : admin@vger.co.uk
+
+File Name    : catalog/view/theme/*/template/account/wishlist.tpl(2)
+VQModObject::applyMod - SEARCH NOT FOUND (ABORTING MOD): <td class="action"><img src="catalog/view/theme/default/image/cart-add.png" alt="<?php echo $button_cart; ?>" title="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" />&nbsp;&nbsp;<a href="<?php echo $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a></td>
+
+----------------------------------------------------------------------
+
+
+---------- Date: 2014-06-10 15:38:39 ~ IP : 105.237.175.115 ----------
+REQUEST URI : /admin/index.php?route=catalog/product&amp;token=28f2950728d5f029ff644eb0e10e6c05
+MOD DETAILS:
+   modFile   : /usr/www/users/hobbybwyan/vqmod/xml/stock_control.xml
+   id        : Stock control for Opencart 1.5.4.1
+   version   : 1.2
+   vqmver    : 2.2.2
+   author    : support@bluebit.co.uk
+
+File Name    : admin/view/template/catalog/product_list.tpl(5)
+VQModObject::applyMod - SEARCH NOT FOUND (ABORTING MOD): <td class="left"><?php echo $product['status']; ?></td>
+
+----------------------------------------------------------------------
+
+

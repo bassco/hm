@@ -1,0 +1,13 @@
+<modification>
+        <version><![CDATA[0.1]]></version>
+        <vqmver><![CDATA[2.1.7]]></vqmver>
+        <author><![CDATA[Andrew Basson (andrew.basson@gmail.com)]]></author>
+        <file name="catalog/model/checkout/order.php">
+                <operation>
+                        <search position="after" index="2"><![CDATA[$text .= $language->get('text_new_order_status') . ' ' . $order_status . "\n\n";]]></search>
+                        <add><![CDATA[				$text .= $language->get('text_new_payment_method') . ' ' . $order_info['payment_method'] . "\n\n";
+                           $text .= trim(str_replace($find, $replace, $format)) . "\n";
+                           $text .= $language->get('text_new_telephone') . ' ' .  html_entity_decode($order_info['telephone'], ENT_NOQUOTES, 'UTF-8') . "\n\n";]]></add>
+                </operation>
+	</file>
+</modification>

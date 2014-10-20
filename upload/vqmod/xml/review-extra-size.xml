@@ -1,0 +1,21 @@
+<modification>
+	<id>Add additional text for a review</id>
+	<version>1.0</version>
+	<vqmver>2.1.7</vqmver>
+	<author>Andrew Basson (andrew.basson@gmail.com)</author>
+   
+<file name="catalog/language/english/product/product.php">
+	<operation>
+	<search position="replace"><![CDATA[1000]]></search>
+	<add><![CDATA[2000]]></add>
+	</operation>
+</file>
+<file name="catalog/controller/product/product.php">
+	<operation>
+	<search position="replace"><![CDATA[1000]]></search>
+	<add><![CDATA[2000]]></add>
+	</operation>
+</file>
+</modification>
+
+

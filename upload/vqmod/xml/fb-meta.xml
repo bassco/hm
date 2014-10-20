@@ -1,0 +1,142 @@
+<modification>
+	<id>Add fb image and data options to home, products and categories</id>
+	<version>1.0</version>
+	<vqmver>2.1.7</vqmver>
+	<author>Andrew Basson (andrew.basson@gmail.com)</author>
+
+<file name="system/library/document.php">
+	<operation>
+	<search position="after" index="1"><![CDATA[class Document {]]></search>
+	<add><![CDATA[
+	private $fbMeta = array();
+	private $tweetMeta = array();
+]]></add>
+	</operation>
+	<operation>
+	<search position="before" index="13" error="log"><![CDATA[}]]></search>
+	<add><![CDATA[
+        public function addFBMeta($property , $content ) {
+// Do not overwrite values already stored
+// product or catalog loaded before home page values
+        if (!empty($content)){
+                if(!array_key_exists($property, $this->fbMeta)){
+                        $this->fbMeta[$property] = array(
+                                'property'   => $property,
+                                'content' => $content
+                )       ;               
+                }
+        }
+        }
+
+	public function getFBMeta () {
+		return $this->fbMeta;
+	}
+
+        public function addTweetMeta($name , $content ) {
+// Do not overwrite values already stored
+// product or catalog loaded before home page values
+        if (!empty($content)){
+                if(!array_key_exists($name, $this->tweetMeta)){
+                        $this->tweetMeta[$name] = array(
+                                'name'   => $name,
+                                'content' => $content
+                )       ;               
+                }
+        }
+        }
+
+	public function getTweetMeta () {
+		return $this->tweetMeta;
+	}
+]]></add>
+	</operation>
+</file>
+<file name="catalog/view/theme/*/template/common/header.tpl">
+	<operation>
+	<search position="before"><![CDATA[<?php foreach ($links as $link) { ?>]]></search>
+	<add><![CDATA[<?php foreach ($tweetMeta as $key => $tweet) { ?>
+<meta property="<?php echo $tweet['name']; ?>" content="<?php echo $tweet['content']; ?>" />
+<?php } ?>
+<?php foreach ($fbMeta as $key => $fb) { ?>
+<meta property="<?php echo $fb['property']; ?>" content="<?php echo $fb['content']; ?>" />
+<?php } ?>
+<meta property="fb:admins" content="100001752370650" />
+]]></add>
+	</operation>
+
+</file>
+<file name="catalog/controller/common/header.php">
+	<operation>
+	<search position="before"><![CDATA[$this->data['text_home'] = $this->language->get('text_home');]]></search>
+	<add><![CDATA[
+	$this->document->addTweetMeta("twitter:card", "summary");
+	$this->document->addTweetMeta("twitter:site", "@hobbymaniacoza");
+	$this->document->addTweetMeta("twitter:creator", "@hobbymaniacoza");
+	$this->document->addFBMeta("og:description", $this->document->getDescription());
+	$this->document->addFBMeta("og:url", $this->data['base']);
+	$this->document->addFBMeta("og:site_name",  $this->config->get('config_name'));
+	$this->document->addFBMeta("og:title", $this->data['name']);
+	$this->document->addFBMeta("og:type", "website");
+	$this->document->addFBMeta("og:image", $this->data['logo']);
+
+  $this->data['fbMeta'] = $this->document->getFBMeta();
+  $this->data['tweetMeta'] = $this->document->getTweetMeta();
+]]></add>
+	</operation>
+
+</file>
+<file name="catalog/controller/product/product.php">
+	<operation>
+	<search position="after"><![CDATA[$this->data['heading_title'] = $product_info['name'];]]></search>
+	<add><![CDATA[	$this->document->addFBMeta("og:description", $this->document->getDescription());
+	$this->document->addFBMeta("og:url", $this->url->link('product/product', 'product_id=' . $this->request->get['product_id']));
+	$this->document->addFBMeta("og:site_name",  $this->config->get('config_name'));
+	$this->document->addFBMeta("og:title", $product_info['name']);
+	$this->document->addFBMeta("og:type", "product");
+	$this->document->addTweetMeta("twitter:card", "product");
+	$this->document->addTweetMeta("twitter:description", $product_info['name'] . " available at " . $this->config->get('config_name'));
+	$this->document->addTweetMeta("twitter:image:src", $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_popup_width'), $this->config->get('config_image_popup_height')));
+	$this->document->addTweetMeta("twitter:image:src", $this->data['logo']);
+	$this->document->addTweetMeta("twitter:title", $product_info['name'] );
+	$this->document->addTweetMeta("twitter:data1", $this->currency->format((float)$product_info['special'] ? $product_info['special'] : $product_info['price']));
+	$this->document->addTweetMeta("twitter:label1", "Price");
+	$this->document->addTweetMeta("twitter:data2", $product_info['model']);
+	$this->document->addTweetMeta("twitter:label2", "Model");
+
+]]></add>
+	</operation>
+	<operation>
+	<search position="before" index="1" error="log"><![CDATA[$this->data['images'] = array();]]></search>
+	<add><![CDATA[	$this->document->addFBMeta("og:image", $this->data['thumb']);
+]]></add>
+	</operation>
+
+</file>
+<file name="catalog/controller/product/category.php">
+	<operation>
+	<search position="after" index="1" error="log"><![CDATA[$url = '';]]></search>
+	<add><![CDATA[	$this->document->addFBMeta("og:description", $this->document->getDescription());
+    $this->document->addFBMeta("og:url", $this->url->link('product/category', 'path=' . $category_id));
+    $this->document->addFBMeta("og:site_name",  $this->config->get('config_name'));
+    $this->document->addFBMeta("og:title", $category_info['name']);
+	$this->document->addFBMeta("og:type", "category");
+	$this->document->addFBMeta("og:image", $this->data['thumb']);
+]]></add>
+	</operation>
+</file>
+<file name="catalog/controller/information/news.php">
+  <operation>
+    <search position="after" index="1" error="log"><![CDATA['popup']]></search>
+    <add>
+      <![CDATA[	$this->document->addFBMeta("og:description", $this->document->getDescription());
+    $this->document->addFBMeta("og:url", $this->url->link('information/news', 'news_id=' . (int)$this->request->get['news_id']));
+    $this->document->addFBMeta("og:site_name",  $this->config->get('config_name'));
+    $this->document->addFBMeta("og:title", $this->data['heading_title']);
+    $this->document->addFBMeta("og:type", "website");
+    $this->document->addFBMeta("og:image", $this->data['thumb']);
+]]>
+    </add>
+  </operation>
+</file>
+  
+</modification>

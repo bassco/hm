@@ -1,0 +1,23 @@
+<!-- Created using vQmod XML Generator by UKSB - http://www.opencart-extensions.co.uk/vqgen //-->
+<modification>
+	<id><![CDATA[Allow future products to be shown]]></id>
+	<version><![CDATA[0.0.1]]></version>
+	<vqmver><![CDATA[2.1.7]]></vqmver>
+	<author><![CDATA[Andrew Basson (andrew.basson@gmail.com)]]></author>
+	<file name="catalog/model/catalog/product.php">
+		<operation>
+			<search position="replace" index="1,2"><![CDATA[ p.date_available <= NOW() AND]]></search>
+			<add><![CDATA[]]></add>
+		</operation>
+	</file>
+	<file name="catalog/controller/module/latest.php">
+		<operation>
+			<search position="replace" offset="5"><![CDATA[$data = array(]]></search>
+			<add><![CDATA[$limit = $setting['limit'];]]></add>
+		</operation>
+		<operation>
+			<search position="replace"><![CDATA[getProducts($data)]]></search>
+			<add><![CDATA[getLatestProducts($limit)]]></add>
+		</operation>
+	</file>
+</modification>

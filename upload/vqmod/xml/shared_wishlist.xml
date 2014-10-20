@@ -1,0 +1,307 @@
+<modification>
+	<id>Shared Wishlist</id>
+	<version>1.0</version>
+	<vqmver>1.2.3</vqmver>
+	<author>admin@vger.co.uk</author>
+	
+	<file name="catalog/view/theme/*/template/account/wishlist.tpl">
+        <operation>
+            <search position="after"><![CDATA[
+<h1><?php echo $heading_title; ?></h1>  
+            ]]></search>
+            <add><![CDATA[
+	<div class="buttons">
+	<div class="left">
+	     <a class="button" id="showForm" style="margin-right: 10px"><?php echo $button_show; ?></a>
+		<a href="<?php echo $button_print; ?>"  class="button" style="margin-right: 10px" target="_blank"><?php echo $button_print_friendly; ?></a>
+	</div>
+	</div>
+	<div id="frm_sendWL" style="display:none;">
+		<h2 style="margin-top: 20px; margin-bottom: 5px;"><?php echo $text_social_share; ?></h1>
+		<div><?php echo $text_social_message; ?></div>
+			<div style="margin-top: 10px">
+				<a target="_blank" href="http://twitter.com/share?text=<?php echo $text_my_wishlist; ?> <?php echo $share_link_encoded; ?>" title="<?php echo $text_twitter_title; ?>"><img src="catalog/view/theme/default/image/twitter.png" alt="<?php echo $text_twitter_alt; ?>"  /></a>
+				<a title="<?php echo $text_facebook_title; ?>" href="http://www.facebook.com/sharer.php?s=100&p[title]=<?php echo $text_my_wishlist; ?>&p[url]=<?php echo $share_link_encoded; ?>" target="_blank"><img src="catalog/view/theme/default/image/facebook.png" alt="<?php echo $text_facebook_alt; ?>"  /></a>
+		</div>
+		<h2 style="margin-top: 20px; margin-bottom: 5px;"><?php echo $text_use_link; ?></h1>
+			<div><?php echo $share_message; ?></div>
+				<br />
+			<div><input type="text" value="<?php echo $share_link; ?>" size="100" /></div>
+				<br />
+				<h2 style="margin-top: 20px; margin-bottom: 5px;"><?php echo $text_send_email; ?></h1>
+				<p><?php echo $text_required_fields; ?></p>
+			<form name="sendWL" id="sendWL"   >
+			  <table border="0" cellpadding="2" cellspacing="2">
+				<tr>
+				  <td align="left"><span class="required">*</span>&nbsp;<?php echo $entry_from_name; ?><br /><input type="text" value="<?php echo $cust_name; ?>" name="from_name" id="from_email"></td>
+				</tr>
+				<tr>
+				  <td align="left"><span class="required">*</span>&nbsp;<?php echo $entry_from_email; ?><br /><input type="text" value="<?php echo $cust_email; ?>" name="from_email" id="from_email"></td>
+				</tr>
+				<tr>
+				  <td align="left"><span class="required">*</span>&nbsp;<?php echo $entry_to_email; ?><br /><input type="text" value="" name="to_email" id="to_email"></td>
+				</tr>
+				<tr>
+				  <td align="left"><span class="required">*</span>&nbsp;<?php echo $entry_subject; ?><br /><input type="text" value="<?php echo $default_subject; ?>" name="subject" id="subject"></td>
+				</tr>
+				<tr>
+				  <td align="left"><span class="required">*</span>&nbsp;<?php echo $entry_message; ?><br /><textarea cols="100" rows="5" name="message" id="message"><?php echo $text_email_message; ?><?php echo "\n\n"; ?><?php echo $share_link; ?></textarea></td>
+				</tr>
+				<tr>
+				  <td align="center" id="sendWL_result"></td>
+				</tr>
+				<tr>
+				  <td align="center" id="sendWL_result"></td>
+				</tr>
+			  </table>
+			</form>
+	    <div class="buttons">
+	<div class="left">
+	     <a class="button" onclick="sendWL_email()"><?php echo $button_send_email; ?></a>
+	</div>
+	</div>
+	</div>	
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="after"><![CDATA[
+<?php echo $footer; ?>
+            ]]></search>
+            <add><![CDATA[
+<script language="javascript">
+function sendWL_email(){
+	$.ajax({
+			type: 'post',
+			url: 'index.php?route=account/wishlist/sendWL',
+			dataType: 'html',
+            data:$("#sendWL").serialize(),
+			success: function (html) {
+				eval(html);
+			}}); 
+}
+</script>
+<script type="text/javascript">
+$("#frm_sendWL" ).hide();
+$('#showForm').click(function() {
+  $('#frm_sendWL').slideToggle('slow', function() {
+  });
+});
+</script>
+            ]]></add>
+        </operation>
+        <operation>
+            <search position="replace"><![CDATA[<td class="action"><img src="catalog/view/theme/default/image/cart-add.png" alt="<?php echo $button_cart; ?>" title="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" />&nbsp;&nbsp;<a href="<?php echo $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a></td>]]></search>
+            <add><![CDATA[<td class="action"><img src="catalog/view/theme/default/image/cart-add.png" alt="<?php echo $button_cart; ?>" title="<?php echo $button_cart; ?>" onclick="addToCart('<?php echo $product['product_id']; ?>');" />&nbsp;&nbsp;<a onclick="wishlistMTC('<?php echo $product['product_id']; ?>');" ><img src="catalog/view/theme/default/image/reorder.png" alt="<?php echo $button_mtc; ?>" title="<?php echo $button_mtc; ?>" /></a>&nbsp;&nbsp;<a href="<?php echo $product['remove']; ?>"><img src="catalog/view/theme/default/image/remove.png" alt="<?php echo $button_remove; ?>" title="<?php echo $button_remove; ?>" /></a></td>]]></add>
+        </operation>
+	</file>
+
+	<file name="catalog/language/english/account/wishlist.php">
+        <operation>
+            <search position="after"><![CDATA[
+$_['text_empty']    = 'Your wish list is empty.';]]></search>
+            <add><![CDATA[
+$_['entry_to_email']		= 'Recipient Email Address';
+$_['entry_from_email']		= 'Your Email Address';
+$_['entry_from_name']		= 'Your Name';
+$_['entry_subject']		= 'Enter a Subject';
+$_['entry_message']		= 'You can edit the messasge or leave it as the default';
+$_['default_subject']		= 'My Wishlist';
+$_['share_message']		= 'If you would like to let others see your wish list then you can distribute the link shown below.';
+$_['text_sent']			= 'Your Email has been Sent';
+$_['button_show']		= 'Show / Hide Share Options';
+$_['button_send_email']		= 'Send Email';
+$_['button_print_friendly']	= 'Printer Friendly Page';
+$_['button_print_page']		= 'Print This Page';
+$_['text_send_email']		= 'Email the Link';
+$_['text_use_link']			= 'Use this Link';
+$_['text_twitter_title']	= 'Click to share your Wish List on Twitter';
+$_['text_twitter_alt']		= 'Twitter Share Button';
+$_['text_facebook_title']	= 'Click to share your Wish List on Facebook';
+$_['text_facebook_alt']		= 'Facebook Share Button';
+$_['text_social_share']		= 'Share the Link';
+$_['text_social_message']	= 'To share the link to your Wish List page on Facebook or Twitter, just click the buttons below (confirmation opens in new window):';
+$_['text_required_fields']	= '* All fields are required';
+$_['text_my_wishlist']		= 'My Wishlist:';
+$_['text_email_message']	= 'Hi, here is a link to a wishlist I have made of some items I would like.... ';
+$_['error_from_email']		= 'Please enter a valid \'From\' email address';
+$_['error_to_email']		= 'Please enter a valid \'To\' email address';
+$_['button_mtc']		= 'Move to Shopping Cart';
+            ]]></add>
+        </operation>
+	</file>
+
+	<file name="catalog/controller/account/wishlist.php">
+        <operation>
+            <search position="after"><![CDATA[$this->data['heading_title'] = $this->language->get('heading_title');]]></search>
+            <add><![CDATA[
+	$this->data['button_print'] = $this->url->link('account/wishlist_print', '', 'SSL');
+	$this->data['button_mtc'] = $this->language->get('button_mtc');
+	$this->data['action'] = $this->url->link('account/wishlist/entered');
+	$this->data['entry_to_email'] = $this->language->get('entry_to_email');
+	$this->data['entry_button'] = $this->language->get('entry_button');
+	$this->data['button_show'] = $this->language->get('button_show');
+	$this->data['button_print_friendly'] = $this->language->get('button_print_friendly');
+	$this->data['button_send_email'] = $this->language->get('button_send_email');
+	$this->data['entry_from_name'] = $this->language->get('entry_from_name');
+	$this->data['entry_from_email'] = $this->language->get('entry_from_email');
+	$this->data['entry_subject'] = $this->language->get('entry_subject');
+	$this->data['entry_message'] = $this->language->get('entry_message');
+	$this->data['share_message'] = $this->language->get('share_message');
+	$this->data['default_subject'] = $this->language->get('default_subject');
+	$this->data['share_link_encoded'] = urlencode($this->url->link('wishlist/shared_wishlist') . '&id=' . $this->customer->getId() . '&name=' . $this->customer->getFirstName());
+	$this->data['share_link'] = $this->url->link('wishlist/shared_wishlist') . '&id=' . $this->customer->getId() . '&name=' . $this->customer->getFirstName();
+	$this->data['cust_email'] = $this->customer->getEmail();
+	$this->data['cust_name'] = $this->customer->getFirstname() . ' ' . $this->customer->getLastname();
+	$this->data['text_use_link'] = $this->language->get('text_use_link');
+	$this->data['text_send_email'] = $this->language->get('text_send_email');
+	$this->data['text_twitter_title'] = $this->language->get('text_twitter_title');
+	$this->data['text_twitter_alt'] = $this->language->get('text_twitter_alt');
+	$this->data['text_facebook_title'] = $this->language->get('text_facebook_title');
+	$this->data['text_facebook_alt'] = $this->language->get('text_facebook_alt');
+	$this->data['text_social_share'] = $this->language->get('text_social_share');
+	$this->data['text_social_message'] = $this->language->get('text_social_message');
+	$this->data['text_required_fields'] = $this->language->get('text_required_fields');
+	$this->data['text_my_wishlist'] = $this->language->get('text_my_wishlist');
+	$this->data['name'] = $this->config->get('config_name');
+	$this->data['text_email_message'] = $this->language->get('text_email_message');
+	$this->data['error_from_email'] = $this->language->get('error_from_email');
+	$this->data['error_to_email'] = $this->language->get('error_to_email');
+		]]></add>
+		
+        </operation>
+        <operation>
+            <search position="before"><![CDATA[public function add() {]]></search>
+            <add><![CDATA[
+	public function sendWL(){
+    	$this->load->language('account/wishlist');
+
+		if(isset($this->request->post['to_email']) and preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $this->request->post['to_email'])){
+			if(isset($this->request->post['from_email']) and preg_match('/^[^\@]+@.*\.[a-z]{2,6}$/i', $this->request->post['from_email'])){
+				echo('$("#sendWL_result").html("<span class=\"error\" style=\"text-align: left; font-weight: bold; font-size: 14px;\">'.$this->language->get('text_sent').'</span>");$("#sendWL")[0].reset();');
+				
+						$mail = new Mail();
+						$mail->protocol = $this->config->get('config_mail_protocol');
+						$mail->parameter = $this->config->get('config_mail_parameter');
+						$mail->hostname = $this->config->get('config_smtp_host');
+						$mail->username = $this->config->get('config_smtp_username');
+						$mail->password = $this->config->get('config_smtp_password');
+						$mail->port = $this->config->get('config_smtp_port');
+						$mail->timeout = $this->config->get('config_smtp_timeout');				
+						$mail->setTo($this->request->post['to_email']);
+						$mail->setFrom($this->request->post['from_email']);
+						$mail->setSender($this->request->post['from_name']);
+						$mail->setSubject(html_entity_decode($this->request->post['subject'], ENT_QUOTES, 'UTF-8'));
+						$mail->setText(strip_tags(html_entity_decode($this->request->post['message'], ENT_QUOTES, 'UTF-8')));
+						$mail->send();
+			}else{
+				echo('$("#sendWL_result").html("<span class=\"error\" style=\"text-align: left; font-weight: bold; font-size: 14px;\">'.$this->language->get('error_from_email').'</span>")');
+		}
+		}else{
+			echo('$("#sendWL_result").html("<span class=\"error\" style=\"text-align: left; font-weight: bold; font-size: 14px;\">'.$this->language->get('error_to_email').'</span>")');
+		}
+	}
+	
+	public function refresh() {
+		
+		$this->language->load('account/wishlist');
+		
+		$this->load->model('catalog/product');
+		
+		$this->load->model('tool/image');
+		
+		$this->data['text_empty'] = $this->language->get('text_empty');
+     	
+		$this->data['column_image'] = $this->language->get('column_image');
+		$this->data['column_name'] = $this->language->get('column_name');
+		$this->data['column_model'] = $this->language->get('column_model');
+		$this->data['column_stock'] = $this->language->get('column_stock');
+		$this->data['column_price'] = $this->language->get('column_price');
+		$this->data['column_action'] = $this->language->get('column_action');
+		
+		$this->data['button_cart'] = $this->language->get('button_cart');
+		$this->data['button_remove'] = $this->language->get('button_remove');
+		$this->data['button_mtc'] = $this->language->get('button_mtc');
+		$this->data['products'] = array();
+	
+		foreach ($this->session->data['wishlist'] as $key => $product_id) {
+			$product_info = $this->model_catalog_product->getProduct($product_id);
+			
+			if ($product_info) { 
+				if ($product_info['image']) {
+					$image = $this->model_tool_image->resize($product_info['image'], $this->config->get('config_image_wishlist_width'), $this->config->get('config_image_wishlist_height'));
+				} else {
+					$image = false;
+				}
+
+				if ($product_info['quantity'] <= 0) {
+					$stock = $product_info['stock_status'];
+				} elseif ($this->config->get('config_stock_display')) {
+					$stock = $product_info['quantity'];
+				} else {
+					$stock = $this->language->get('text_instock');
+				}
+							
+				if (($this->config->get('config_customer_price') && $this->customer->isLogged()) || !$this->config->get('config_customer_price')) {
+					$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')));
+				} else {
+					$price = false;
+				}
+				
+				if ((float)$product_info['special']) {
+					$special = $this->currency->format($this->tax->calculate($product_info['special'], $product_info['tax_class_id'], $this->config->get('config_tax')));
+				} else {
+					$special = false;
+				}
+																			
+				$this->data['products'][] = array(
+					'product_id' => $product_info['product_id'],
+					'thumb'      => $image,
+					'name'       => $product_info['name'],
+					'model'      => $product_info['model'],
+					'stock'      => $stock,
+					'price'      => $price,		
+					'special'    => $special,
+					'href'       => $this->url->link('product/product', 'product_id=' . $product_info['product_id']),
+					'remove'     => $this->url->link('account/wishlist', 'remove=' . $product_info['product_id'])
+				);
+			}
+		}	
+
+		$this->data['continue'] = $this->url->link('account/account', '', 'SSL');
+		
+		if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/account/refresh_wishlist.tpl')) {
+			$this->template = $this->config->get('config_template') . '/template/account/refresh_wishlist.tpl';
+		} else {
+			$this->template = 'default/template/account/refresh_wishlist.tpl';
+		}
+		
+		$this->response->setOutput($this->render());		
+	}
+	
+	public function wlRemove() {
+	
+		if (isset($this->request->get['remove'])) {
+		$key = array_search($this->request->get['remove'], $this->session->data['wishlist']);
+		
+		if ($key !== false) {
+			unset($this->session->data['wishlist'][$key]);
+		}
+			}
+	}
+	]]></add>
+        </operation>
+	</file>	
+	<file name="catalog/controller/account/register.php">
+        <operation>
+            <search position="before"><![CDATA[if (file_exists(DIR_TEMPLATE . $this->config->get('config_template') . '/template/account/register.tpl')) {]]></search>
+            <add><![CDATA[
+		
+		if (!isset($this->session->data['wishlist'])) {
+			$this->session->data['wishlist'] = array();
+		}
+		
+		]]></add>
+		
+        </operation>
+	</file>	
+</modification>

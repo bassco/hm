@@ -1,0 +1,60 @@
+<modification>
+   <id><![CDATA[Remember Payment and Shipping Method]]></id>
+   <version><![CDATA[1.0]]></version>
+   <vqmver><![CDATA[2.3.2]]></vqmver>
+   <author><![CDATA[twilli]]></author>
+
+   <file name="catalog/model/account/order.php">
+  		<operation>
+			<search position="after"><![CDATA[
+				'payment_address_format'  => $order_query->row['payment_address_format'],
+			]]></search>
+			<add><![CDATA[
+				'payment_code'	          => $order_query->row['payment_code'],
+				'shipping_code'	          => $order_query->row['shipping_code'],
+			]]></add>
+		</operation>
+	</file>
+	
+   <file name="catalog/controller/checkout/payment_method.php">
+  		<operation>
+			<search position="replace"><![CDATA[
+				$this->data['code'] = '';
+			]]></search>
+			<add><![CDATA[
+				$this->load->model('account/order');
+				$latest_orders = $this->model_account_order->getOrders(0,1);
+				if($latest_orders) {
+					foreach ($latest_orders as $latest_order) {
+						$latest_order_id = $latest_order['order_id'];
+					}
+					$latest_order_info = $this->model_account_order->getOrder($latest_order_id);
+					$this->data['code'] = $latest_order_info['payment_code'];
+				} else {
+					$this->data['code'] = '';
+				}
+			]]></add>
+		</operation>
+	</file>
+	
+   <file name="catalog/controller/checkout/shipping_method.php">
+  		<operation>
+			<search position="replace"><![CDATA[
+				$this->data['code'] = '';
+			]]></search>
+			<add><![CDATA[
+				$this->load->model('account/order');
+				$latest_orders = $this->model_account_order->getOrders(0,1);
+				if($latest_orders) {
+					foreach ($latest_orders as $latest_order) {
+						$latest_order_id = $latest_order['order_id'];
+					}
+					$latest_order_info = $this->model_account_order->getOrder($latest_order_id);
+					$this->data['code'] = $latest_order_info['shipping_code'];
+				} else {
+					$this->data['code'] = '';
+				}
+			]]></add>
+		</operation>
+	</file>
+</modification>
