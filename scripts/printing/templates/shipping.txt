@@ -1,0 +1,17 @@
+L
+D11
+rfmt6
+A2
+1e6301600280071BORD&D${lab.order_id}
+ySPM
+1911A0600170128ORD${lab.order_id}
+1911C1001700138Attn: ${lab.firstname} ${lab.lastname}
+1911C1001550138${lab.company}
+1911C1001400138${lab.address1}
+1911C1001250138${lab.address2}
+1911C1001100138${lab.city}
+1911C1000950138${lab.zone}
+1911C1000800138${lab.code}
+1911C1000560138PH:${lab.telephone}
+Q0001
+E
