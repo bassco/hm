@@ -67,11 +67,11 @@
             ]]></search>
             <add><![CDATA[
 				if( $this->cart->getSubTotal() < $this->config->get('free_total') ) {
-					$diff = (float)($this->config->get('free_total') - $this->cart->getSubTotal());
+					$diff = (float)($this->config->get('free_total') - $this->cart->getTotal());
 				} else {
-					$diff = (float)($this->cart->getSubTotal() - $this->config->get('free_total'));
+					$diff = (float)($this->cart->getTotal() - $this->config->get('free_total'));
 				}
-				if ($this->cart->getSubTotal() < $this->config->get('free_total')) {
+				if ($this->cart->getTotal() < $this->config->get('free_total')) {
 					$this->data['notify'] = false;
 					$this->data['alert'] = sprintf( $this->language->get('text_alert'), $this->currency->format($this->config->get('free_total'),false,false), $this->currency->format($diff,false,false) );
 					
@@ -88,12 +88,12 @@
 				$this->data['button_continue'] = $this->language->get('button_continue');
 			]]></search>
 			<add><![CDATA[
-				if( $this->cart->getSubTotal() < $this->config->get('free_total') ) {
-					$diff = (float)($this->config->get('free_total') - $this->cart->getSubTotal());
+				if( $this->cart->getTotal() < $this->config->get('free_total') ) {
+					$diff = (float)($this->config->get('free_total') - $this->cart->getTotal());
 				} else {
-					$diff = (float)($this->cart->getSubTotal() - $this->config->get('free_total'));
+					$diff = (float)($this->cart->getTotal() - $this->config->get('free_total'));
 				}
-				if ($this->cart->getSubTotal() < $this->config->get('free_total')) {
+				if ($this->cart->getTotal() < $this->config->get('free_total')) {
 					$this->data['notify'] = false;
 					$this->data['alert'] = sprintf( $this->language->get('text_alert'), $this->currency->format($this->config->get('free_total'),false,false), $this->currency->format($diff,false,false) );
 					
