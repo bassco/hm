@@ -2,12 +2,16 @@
 class ModelCatalogComingSoon extends Model {
 
 function assoc_array_shuffle ($array,$limit=3) {
+    if (is_array($array)){
+
     while (count($array) > 0) {
         $val = array_rand($array);
         $new_arr[$val] = $array[$val];
         unset($array[$val]);
     }
     return array_splice($new_arr,0,$limit);
+    }
+    return null;
 }
 
     public function getComingSoonProducts($limit) {
@@ -25,7 +29,7 @@ function assoc_array_shuffle ($array,$limit=3) {
 
 			$this->cache->set('product.coming_soon.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . (int)$limit, $product_data);
 		}
- 		
+
 		// Shuffle the products assoc array and return the first limit records
 
 		return $this->assoc_array_shuffle($product_data,$limit);

@@ -93,9 +93,11 @@
         </div>
         <div class="wishlist"><a onclick="addToWishList('<?php echo $product['product_id']; ?>');"><?php echo $button_wishlist; ?></a></div>
         <div class="compare"><a onclick="addToCompare('<?php echo $product['product_id']; ?>');"><?php echo $button_compare; ?></a></div>
+          <div class="rating">
         <?php if ($product['rating']) { ?>
-          <div class="rating"><img src="catalog/view/theme/default/image/stars-<?php echo $product['rating']; ?>.png" alt="<?php echo $product['reviews']; ?>" /></div>
+          <img src="catalog/view/theme/default/image/stars-<?php echo $product['rating']; ?>.png" alt="<?php echo $product['reviews']; ?>" />
         <?php } ?>
+          </div>
       </div>
 
       <div class="left">
@@ -174,9 +176,11 @@ function display(view) {
 
 			var rating = $(element).find('.rating').html();
 
+			html += '<div class="rating">';
 			if (rating != null) {
-				html += '<div class="rating">' + rating + '</div>';
+				html += rating;
 			}
+			html += '</div>';
 
 			html += '</div>';
 
@@ -190,9 +194,11 @@ function display(view) {
 
 			var price = $(element).find('.price').html();
 
+			html += '<div class="price">';
 			if (price != null) {
-				html += '<div class="price">' + price  + '</div>';
+				html += price;
 			}
+			html += '</div>';
 
 			html += '  <div class="name">' + $(element).find('.name').html() + '</div>';
 			html += '  <div class="description">' + $(element).find('.description').html() + '</div>';
@@ -222,9 +228,11 @@ function display(view) {
 
 			var price = $(element).find('.price').html();
 
+			html += '<div class="price">';
 			if (price != null) {
-				html += '<div class="price">' + price  + '</div>';
+				html += price;
 			}
+			html += '</div>';
 
 			html += '<div class="cart">' + $(element).find('.cart').html() + '</div>';
 			html += '<div class="wishlist">' + $(element).find('.wishlist').html() + '</div>';
@@ -232,9 +240,11 @@ function display(view) {
 
 			var rating = $(element).find('.rating').html();
 
+			html += '<div class="rating">';
 			if (rating != null) {
-				html += '<div class="rating">' + rating + '</div>';
+				html += rating;
 			}
+			html += '</div>';
 
 			$(element).html(html);
 		});
