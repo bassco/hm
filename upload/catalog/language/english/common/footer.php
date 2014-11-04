@@ -9,10 +9,10 @@ $_['text_sitemap']      = 'Site Map';
 $_['text_manufacturer'] = 'Brands';
 $_['text_voucher']      = 'Gift Vouchers';
 $_['text_affiliate']    = 'Affiliates';
-$_['text_special']      = 'Specials';
+$_['text_special']      = 'Special Offers';
 $_['text_account']      = 'My Account';
 $_['text_order']        = 'Order History';
-$_['text_wishlist']     = 'Wish List';
+$_['text_wishlist']     = 'Saved Items';
 $_['text_newsletter']   = 'Newsletter';
 $_['text_powered']      = 'Powered By <a href="http://www.opencart.com">OpenCart</a><br /> %s &copy; %s';
 ?>

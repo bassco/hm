@@ -1,6 +1,6 @@
 html {
 	overflow-y:auto;
-    overflow-x:hidden;
+        overflow-x:hidden;
 	margin: 0;
 	padding: 0;
 }
@@ -727,23 +727,23 @@ a.button:hover, input.button:hover {
 	margin-bottom: 10px;
     padding: 5px;
     border:1px solid #DBDEE1;
-    height: 244px;
+    /*height: 230px;*/
 }
 #column-left + #column-right + #content .box-product > div {
-	width: 119px;
+	width: 172px;
 }
 .box-product .image {
 	display: block;
 	margin-bottom: 0px;
-	min-height: 91px;
-	max-height: 91px;
+	min-height: 151;
+	max-height: 151px;
 }
 .box-product .image img {
 	/*padding: 3px;
 	border: 1px solid #E7E7E7;*/
 }
 .box-product .name a {
-	color: #EB3D00;
+	color: #333333;
 	font-weight: bold;
 	text-decoration: none;
 	display: block;
@@ -757,9 +757,10 @@ a.button:hover, input.button:hover {
 	color: #333333;
 	margin-top: 4px;
 	margin-bottom: 4px;
-	min-height: 28px;
+	min-height: 14px;
 }
 .box-product .price-old {
+	display: none;
 	color: #F00;
 	text-decoration: line-through;
 }
@@ -941,7 +942,7 @@ a.button:hover, input.button:hover {
 	margin-bottom: 3px;
 }
 .product-list .name a {
-	color: #EB3D00;
+	color: #333333;
 	font-weight: bold;
 	text-decoration: none;
 }
@@ -966,6 +967,7 @@ a.button:hover, input.button:hover {
 	font-size: 12px;
 }
 .product-list .price-old {
+	display: none;
 	color: #F00;
 	text-decoration: line-through;
 }
@@ -1029,7 +1031,7 @@ a.button:hover, input.button:hover {
 	border: 1px solid #E7E7E7;*/
 }
 .product-grid .name a {
-	color: #EB3D00;
+	color: #333333;
 	font-weight: bold;
 	text-decoration: none;
 	display: block;
@@ -1054,6 +1056,7 @@ a.button:hover, input.button:hover {
 	min-height: 14px;
 }
 .product-grid .price-old {
+	display: none;
 	color: #F00;
 	text-decoration: line-through;
 }
@@ -1148,6 +1151,7 @@ a.button:hover, input.button:hover {
 	color: #333333;
 }
 .product-info .price-old {
+	display: none;
 	color: #F00;
 	text-decoration: line-through;
 }

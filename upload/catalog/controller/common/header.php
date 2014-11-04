@@ -75,6 +75,8 @@ class ControllerCommonHeader extends Controller {
 		$this->data['text_account'] = $this->language->get('text_account');
 		$this->data['text_checkout'] = $this->language->get('text_checkout');
 		$this->data['text_coming_soon'] = $this->language->get('text_coming_soon');
+                $this->data['text_contact'] = $this->language->get('text_contact');
+
 
 		$this->data['home'] = $this->url->link('common/home');
 		$this->data['news'] = $this->url->link('information/news');
@@ -84,6 +86,7 @@ class ControllerCommonHeader extends Controller {
 		$this->data['coming_soon'] = $this->url->link('product/coming_soon');
 		$this->data['shopping_cart'] = $this->url->link('checkout/cart');
 		$this->data['checkout'] = $this->url->link('checkout/checkout', '', 'SSL');
+                $this->data['contact'] = $this->url->link('information/contact');
 
 		if (isset($this->request->get['filter_name'])) {
 			$this->data['filter_name'] = $this->request->get['filter_name'];

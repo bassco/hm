@@ -9,8 +9,8 @@
  * @email		info@opencartstore.com
  */
 
-$_['heading_title'] 		= 'Join Mailing List';
-$_['entry_email'] 			= 'Email';
+$_['heading_title'] 		= 'Join Our Mailing List';
+$_['entry_email']		= 'Email';
 $_['entry_lastname'] 		= 'Last name';
 $_['entry_firstname'] 		= 'First name';
 $_['button_submit'] 		= 'Submit';

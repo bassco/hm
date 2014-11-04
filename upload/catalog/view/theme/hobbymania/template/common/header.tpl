@@ -106,11 +106,10 @@ DD_belatedPNG.fix('#logo img');
 <div class="toplinks">
     <ul>
         <li><a href="<?php echo $home; ?>"><?php echo $text_home; ?></a></li>
-        <li><a href="<?php echo $news; ?>"><?php echo $text_news; ?></a></li>
-        <li><a href="<?php echo $wishlist; ?>" id="wishlist-total"><?php echo $text_wishlist; ?></a></li>
-        <li><a href="<?php echo $account; ?>"><?php echo $text_account; ?></a></li>
+        <li><a href="<?php echo $contact; ?>"><?php echo $text_contact; ?></a></li>
         <li><a href="<?php echo $coming_soon; ?>"><?php echo $text_coming_soon; ?></a></li>
-        <li><a href="<?php echo $shopping_cart; ?>"><?php echo $text_shopping_cart; ?></a></li>
+        <li><a href="<?php echo $account; ?>"><?php echo $text_account; ?></a></li>
+        <li><a href="<?php echo $wishlist; ?>" id="wishlist-total"><?php echo $text_wishlist; ?></a></li>
         <li><a href="<?php echo $checkout; ?>"><?php echo $text_checkout; ?></a></li>
     </ul>
 </div>
@@ -119,11 +118,10 @@ DD_belatedPNG.fix('#logo img');
         <select onchange="location=this.value">
             <option></option>
             <option value="<?php echo $home; ?>"><?php echo $text_home; ?></option>
-            <option value="<?php echo $news; ?>"><?php echo $text_news; ?></option>
-            <option value="<?php echo $wishlist; ?>" id="Option1"><?php echo $text_wishlist; ?></option>
-            <option value="<?php echo $account; ?>"><?php echo $text_account; ?></option>
+            <option value="<?php echo $contact; ?>"><?php echo $text_contact; ?></option>
             <option value="<?php echo $coming_soon; ?>"><?php echo $text_coming_soon; ?></option>
-            <option value="<?php echo $shopping_cart; ?>"><?php echo $text_shopping_cart; ?></option>
+            <option value="<?php echo $account; ?>"><?php echo $text_account; ?></option>
+            <option value="<?php echo $wishlist; ?>" id="Option1"><?php echo $text_wishlist; ?></option>
             <option value="<?php echo $checkout; ?>"><?php echo $text_checkout; ?></option>
         </select>
     </div>

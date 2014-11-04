@@ -6,7 +6,7 @@
 //-----------------------------------------------------
 
 // Heading 
-$_['heading_title']   	= 'Latest News';
+$_['heading_title']   	= 'News';
 
 // Text
 $_['text_more']  		= 'Full Article';

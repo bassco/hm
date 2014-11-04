@@ -1,7 +1,6 @@
 .idea
 hm-latest.tgz
 hobbycart_2014-Thu.dump
-.htaccess
 /config.php
 admin/config.php
 
@@ -12,3 +11,4 @@ image/data/
 image/cache/
 system/cache/
 system/logs/
+vqmod/vqcache/

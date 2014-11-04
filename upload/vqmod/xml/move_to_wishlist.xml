@@ -144,7 +144,7 @@ $this->response->setOutput($this->render());
 $_['button_remove']         = 'Remove';
 			]]></search>
             <add><![CDATA[
-$_['button_mtremove']         = 'Move To Wishlist';
+$_['button_mtremove']         = 'Move To Saved Items';
             ]]></add>
         </operation>
 	</file>	
